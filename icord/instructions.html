@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Image Coordinate Collector | Instructions</title>
+        <link rel="stylesheet" href="alt.css"/>
+    </head>
+    <body>
+        <h2>Instructions</h2>
+        <p>
+            Use your cursor to click around and collect coordinates. A coordinate is captured and outputted to the text area as you click.
+        </p>
+        <h3>The Buttons</h3>
+        <section style="margin-bottom: 50px;">
+            <h4>1. Output new-line / continuous</h4>
+            <p>
+                Allows you to define if you want your coordinates to output individually as a new 
+            </p>
+            <code>
+                0,0<br>
+                0,1<br>
+                0,2<br>
+            </code>
+            <p>
+                or as a continuous comma-separated string.
+            </p>                
+            <code>
+                0,0,0,1,0,2
+            </code>
+        </section>
+
+        <section style="margin-bottom: 50px;">
+            <h4>2. Set image</h4>
+            <p>
+                Upload your own image to use.
+                <em>Your file is not sent anywhere, it is all handled locally on the client side.</em>
+            </p>
+        </section>
+
+        <section style="margin-bottom: 50px;">
+            <h4>3. Clear coordinates</h4>
+            <p>
+                Clear the coordinate output box!
+            </p>
+        </section>
+
+        <section style="margin-bottom: 50px;">
+            <h4>4. Show trace</h4>
+            <p>
+                Shows you an overlay representing your trace. <em>This feature is not available in new-line output mode, because I'm lazy.</em>
+            </p>
+        </section>
+
+        <section style="margin-bottom: 50px;">
+            <h4>5. Copy coordinates</h4>
+            <p>
+                Sends the coordinates from the output to your clipboard to paste anywhere!
+            </p>
+        </section>
+
+        <div>
+            <em> That's it :-) </em>
+        </div>
+        <div>
+            <button onclick="location.href='/'">Return to Application</button>
+        </div>
+    </body>
+</html>

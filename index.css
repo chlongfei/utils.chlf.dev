@@ -1,0 +1,31 @@
+html { 
+    background-color: rgb(44, 44, 44);
+    color: white;
+    font-family: sans-serif;
+    text-align: center;
+}
+
+body {
+    padding: 0 50px;
+    margin: 0;
+}
+
+.card {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    height: 150px;
+    width: 100px;
+    background-color: rgb(202, 202, 202);
+    color: black;
+    font-weight: bold;
+    box-shadow: 4px 2px 5px grey;
+}
+
+.card:hover{
+    background-color: rgb(161, 161, 161);
+}.card:active{
+    opacity: 50%;
+    box-shadow: none;
+    border: solid black;
+}

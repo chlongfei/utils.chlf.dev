@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Image Coordinate Collector</title>
+        <link rel="stylesheet" href="index.css"/>
+    </head>
+    <body onload="loadSeq()">
+        <!-- SCRIPT -->
+        <script>
+            function loadSeq(){
+                document.getElementById("img-disp").addEventListener("click",getCoord);
+                toggleCoordToClipboard();
+            }
+
+            var apnl = false;
+            const pickerOpt = {
+                types: [
+                    {
+                        description: "Images",
+                        accept: {
+                            "image/*": [".png", ".gif", ".jpeg", ".jpg", ".webp"],
+                        },
+                    },
+                ],
+                excludeAcceptAllOption: true,
+                multiple: false,
+            };
+
+            /**
+             * handles reterival of image from client system utilizing FileSystemAPI then sets the
+             * object URL to display
+             * @link https://developer.mozilla.org/en-US/docs/Web/API/File_System_API#interfaces
+             */
+            async function getFSImg(){
+                const [fileHandler] = await window.showOpenFilePicker(pickerOpt);
+                const fd = await fileHandler.getFile();
+                const fdUrl = URL.createObjectURL(fd);
+                document.getElementById("img-disp").setAttribute("src",fdUrl);
+                clearCoords();
+            }
+
+            /**
+             * utilizing MouseEvent, reterives the coordinate of cursor when clicked on image
+             * coordinate is then output to text area
+             * @param {event} e 
+             */
+            function getCoord(event) {
+                let coordStr = "";
+                let disp = document.getElementById("coord-disp")
+                var x = event.offsetX;
+                var y = event.offsetY;
+
+                if (apnl) {
+                    coordStr = x + "," + y + "\n";
+                }else{                    
+                    if (disp.value.length > 0){
+                        coordStr = ",";
+                    }
+                    coordStr += x + "," + y;
+                }
+                disp.value = disp.value + coordStr;
+                toggleCoordToClipboard();
+            }
+
+            /**
+             * sets flag for if "Append new line" is ticked
+             * @param {event} e 
+             */
+            function toggleNewline(){
+                apnl = !apnl;
+                if (apnl){
+                    document.getElementById("ctrl-togNewline").innerText = "Output continuous";
+                    document.getElementById("ctrl-togNewline").setAttribute("title","Coordinates will output each as new line.");
+                    document.getElementById("ctrl-shwPoly").setAttribute("disabled","");
+                    document.getElementById("ctrl-shwPoly").setAttribute("title","Trace not available in continuous output mode.");
+                } else {
+                    document.getElementById("ctrl-togNewline").innerText = "Output new-line";
+                    document.getElementById("ctrl-togNewline").setAttribute("title","Coordinates will append after eachother comma-separated.");
+                    document.getElementById("ctrl-shwPoly").removeAttribute("disabled");
+                }
+            }
+
+            /**
+             * clears the text area
+             */
+            function clearCoords(){
+                document.getElementById("coord-disp").value = "";
+                toggleCoordToClipboard();
+            }
+
+            /**
+             * sends contents of coordinate area to user clipboard
+             */
+            function sendCoordToClipboard(){
+                let cD = document.getElementById("coord-disp").value;
+                navigator.clipboard.writeText(cD);
+            }
+
+            /**
+             * disables copy to clipboard button when coordinate display is empty
+             */
+            function toggleCoordToClipboard(){
+                let cDLen = document.getElementById("coord-disp").value.length;
+                if (cDLen === 0){
+                    document.getElementById("ctrl-cpyCoord").setAttribute("disabled","");
+                    document.getElementById("ctrl-cpyCoord").setAttribute("title","No coordinates to copy.");
+                } else {
+                    document.getElementById("ctrl-cpyCoord").removeAttribute("disabled");
+                    document.getElementById("ctrl-cpyCoord").setAttribute("title","Send coordinates to clipboard.");
+                }
+            }
+
+            /**
+             * shows the trace created from coordinates overlayed on image
+             */
+            function toggleTrace(){
+                let isVisible = document.getElementById("img-poly-block").checkVisibility();
+                if (isVisible) {
+                    document.getElementById("img-poly-block").style.display = 'none';
+                    document.getElementById("ctrl-shwPoly").innerText = "Show trace";
+                } else {
+                    let cD = document.getElementById("coord-disp").value;
+                    let img = document.getElementById("img-disp");
+                    let iPos = img.getBoundingClientRect();
+                    let polyBlk = document.getElementById("img-poly-block");
+
+                    document.getElementById("img-poly").setAttribute("points", cD);
+
+                    // sync dimentions and position of overlay with image
+                    polyBlk.style.top = iPos.top;               //set svg window top to match image
+                    polyBlk.style.left = iPos.left;             //set svg window left to match image
+                    polyBlk.style.width = img.offsetWidth;      //set svg width to match image
+                    polyBlk.style.height = img.offsetHeight;    //set svg height to match image
+
+                    polyBlk.style.display = 'block';
+
+                    document.getElementById("ctrl-shwPoly").innerText = "Hide trace";
+                }
+            }
+        </script>
+
+        <!-- INTERFACE -->
+        <h3>Image Coordinate Collection Tool</h3>
+        <!-- image display block -->
+        <div id="img-disp-block">
+            <img id="img-disp" src="birb.jpeg" draggable="false" height="500"/>
+            
+            <!-- show the trace overlayed on image -->
+            <svg id="img-poly-block">
+                <polygon id="img-poly" points=""></polygon>
+            </svg>
+            
+        </div>
+        <!-- control strip -->
+        <div id="ctrl-pane">
+            <button id="ctrl-togNewline" onclick="toggleNewline()" title="Coordinates will append after eachother cpomma-separated.">Output New-line</button>
+            <button id="ctrl-setImg" onclick="getFSImg()" title="Select image to use">Set Image</button>
+            <button id="ctrl-clrCoord" onclick="clearCoords()" title="Clears coordinate outputs">Clear Coordinates</button>
+            <button id="ctrl-shwPoly" onclick="toggleTrace()" title="Displays polygon trace">Show trace</button>
+            <button id="ctrl-cpyCoord" onclick="sendCoordToClipboard()" title="Send coordinate output to clipboard">Copy Coordinates</button>
+        </div>
+        <!-- coordinate output area -->
+        <div id="coord-block">
+            <textarea id="coord-disp" rows="10" cols="80" placeholder="start clicking - coordinates will appear here" readonly></textarea>
+        </div>
+
+        <footer>
+            <a href="instructions.html">Instructions</a> | <a href="privacy.html">Privacy</a>
+        </footer>
+    </body>
+</html>

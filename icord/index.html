@@ -137,13 +137,33 @@
                     document.getElementById("ctrl-shwPoly").innerText = "Hide trace";
                 }
             }
+
+            /**
+             * sets dimensions of image, default is "auto"
+             */
+            function setImageDimensions(){
+                let ih = document.getElementById("img-height").value;
+                let iw = document.getElementById("img-width").value;
+
+                //handle undefined states
+                if (ih === undefined){
+                    ih = "auto";
+                }
+                if (iw === undefined){
+                    iw = "auto";
+                }
+                
+                let img = document.getElementById("img-disp");
+                img.setAttribute("height", ih);
+                img.setAttribute("width", iw);
+            }
         </script>
 
         <!-- INTERFACE -->
         <h3>Image Coordinate Collection Tool</h3>
         <!-- image display block -->
         <div id="img-disp-block">
-            <img id="img-disp" src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/45/Eopsaltria_australis_-_Mogo_Campground.jpg/1280px-Eopsaltria_australis_-_Mogo_Campground.jpg" draggable="false" height="500"/>
+            <img id="img-disp" src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/45/Eopsaltria_australis_-_Mogo_Campground.jpg/1280px-Eopsaltria_australis_-_Mogo_Campground.jpg" draggable="false" height="500" width="auto"/>
             
             <!-- show the trace overlayed on image -->
             <svg id="img-poly-block">
@@ -153,11 +173,20 @@
         </div>
         <!-- control strip -->
         <div id="ctrl-pane">
-            <button id="ctrl-togNewline" onclick="toggleNewline()" title="Coordinates will append after eachother cpomma-separated.">Output New-line</button>
-            <button id="ctrl-setImg" onclick="getFSImg()" title="Select image to use">Set Image</button>
-            <button id="ctrl-clrCoord" onclick="clearCoords()" title="Clears coordinate outputs">Clear Coordinates</button>
-            <button id="ctrl-shwPoly" onclick="toggleTrace()" title="Displays polygon trace">Show trace</button>
-            <button id="ctrl-cpyCoord" onclick="sendCoordToClipboard()" title="Send coordinate output to clipboard">Copy Coordinates</button>
+            <div style="margin-bottom: 5px">
+                <label for="img-height">Image Height</label>
+                <input id="img-height" type="number" placeholder="auto"/>
+                <label for="img-height">Image Width</label>
+                <input id="img-width" type="number" placeholder="auto"/>
+                <button id="ctrl-set-img-dimen" onclick="setImageDimensions()">Set Dimensions</button>
+            </div>
+            <div>
+                <button id="ctrl-togNewline" onclick="toggleNewline()" title="Coordinates will append after eachother cpomma-separated.">Output New-line</button>
+                <button id="ctrl-setImg" onclick="getFSImg()" title="Select image to use">Set Image</button>
+                <button id="ctrl-clrCoord" onclick="clearCoords()" title="Clears coordinate outputs">Clear Coordinates</button>
+                <button id="ctrl-shwPoly" onclick="toggleTrace()" title="Displays polygon trace">Show trace</button>
+                <button id="ctrl-cpyCoord" onclick="sendCoordToClipboard()" title="Send coordinate output to clipboard">Copy Coordinates</button>   
+            </div>
         </div>
         <!-- coordinate output area -->
         <div id="coord-block">

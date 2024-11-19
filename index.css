@@ -10,6 +10,10 @@ body {
     margin: 0;
 }
 
+th, td {
+    padding: 10px
+}
+
 .card {
     display: flex;
     flex-direction: row;
@@ -20,11 +24,14 @@ body {
     color: black;
     font-weight: bold;
     box-shadow: 4px 2px 5px grey;
+    border-radius: 5px;
+    cursor: pointer;
+    user-select: none;
 }
-
 .card:hover{
     background-color: rgb(161, 161, 161);
-}.card:active{
+}
+.card:active{
     opacity: 50%;
     box-shadow: none;
     border: solid black;
